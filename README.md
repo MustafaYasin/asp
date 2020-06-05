@@ -4,4 +4,4 @@
 Mustafa Yasin\
 Xingjian Chen\
 Yang Mao\
-Steffen Brandenburg\
+Steffen Brandenburg
