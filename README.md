@@ -5,7 +5,7 @@ Login into your cip virtual machine\
 `ssh username@remote.ifi.lmu.de`
 
 Install Anacoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)\
-Install Anaconda on [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)\
+Install Anaconda on [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)
 
 Create a virtual Environmet via Anaconda\
 `conda create -n yourenvname python=3.6 anaconda`
