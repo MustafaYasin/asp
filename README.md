@@ -1,6 +1,9 @@
 # Autonome Systeme Praktikum
 YOu need `Python 3.6.0` to  run this project
 
+Login into your cip virtual machine
+`ssh username@remote.ifi.lmu.de`
+
 Install Anacoda [Linux](bash ~/Downloads/Anaconda3-2020.02-Linux-x86_64.sh) [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)
 
 Create a virtual Environmet via Anaconda
