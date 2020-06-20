@@ -1,5 +1,5 @@
 # Autonome Systeme Praktikum
-You need `Python 3.6.0` to  run this project
+[Python](https://www.python.org/downloads/) 3.6.0 is required to run this project
 
 Login into your cip virtual machine\
 `ssh username@remote.ifi.lmu.de`
@@ -22,8 +22,8 @@ Start with the traning\
 `python train.py`
 
 
-### Gruppenmitglieder
-Mustafa Yasin\
-Xingjian Chen\
-Yang Mao\
-Steffen Brandenburg
+### Groupmemebers
+[Mustafa Yasin](https://github.com/MustafaYasin)\
+[Xingjian Chen](https://github.com/marcchan)\
+[Yang Mao](https://github.com/leo-mao)\
+[Steffen Brandenburg](https://github.com/SteffenBr)
