@@ -13,7 +13,11 @@ Activate your Environment
 `source activate yourenvname`
 
 Install the all needed dependencies
-`pip install -r requirements.txt`  
+`pip install -r requirements.txt`
+
+Configur the slurm script (asp.sh) with your credentials and run it
+
+`sbatch -p All asp.sh`
 
 Start with the traning
 `python train.py`
