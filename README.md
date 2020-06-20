@@ -23,7 +23,7 @@ Start with the traning\
 `python train.py`
 
 
-### Groupmemebers
+### Groupmembers
 [Mustafa Yasin](https://github.com/MustafaYasin)\
 [Xingjian Chen](https://github.com/marcchan)\
 [Yang Mao](https://github.com/leo-mao)\
