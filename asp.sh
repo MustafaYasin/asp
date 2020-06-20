@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=MeinJob
+#SBATCH --job-name=tennis
 #SBATCH --comment="Diese Beschreibung hilft meinen Job zu verstehen"
 #SBATCH --begin=20:00
 #SBATCH --mem=2048
@@ -12,8 +12,8 @@
 #SBATCH --ntasks=1
 # ...
 
-#Am Ende folgt der Aufruf der eigentlichen Hauptprogramme:
+#Hier läuft das Hauptprogramm:
 
-echo "Hallo Welt tennis.atp, alles klar!"
+echo "Hallo tennis.atp, alles klar!"
 pip install -r requirements.txt
-python train.py
+python ddpg.py
