@@ -1,12 +1,11 @@
+from mlagents_envs.environment import UnityEnvironment
 import tensorflow as tf
 import numpy as np
 import gym
 import time
 
-
 np.random.seed(1)
 tf.set_random_seed(1)
-
 
 MAX_EPISODES = 200
 MAX_EP_STEPS = 200
@@ -48,7 +47,7 @@ class Actor(object):
             self.hard_replace = [tf.assign(t, e) for t, e in zip(self.t_params, self.e_params)]
         else:
             self.soft_replace = [tf.assign(t, (1 - self.replacement['tau']) * t + self.replacement['tau'] * e)
-                                     for t, e in zip(self.t_params, self.e_params)]
+                                 for t, e in zip(self.t_params, self.e_params)]
 
     def _build_net(self, s, scope, trainable):
         with tf.variable_scope(scope):
@@ -60,7 +59,7 @@ class Actor(object):
             with tf.variable_scope('a'):
                 actions = tf.layers.dense(net, self.a_dim, activation=tf.nn.tanh, kernel_initializer=init_w,
                                           bias_initializer=init_b, name='a', trainable=trainable)
-                scaled_a = tf.multiply(actions, self.action_bound, name='scaled_a') # -action_bound to action_bound
+                scaled_a = tf.multiply(actions, self.action_bound, name='scaled_a')  # -action_bound to action_bound
         return scaled_a
 
     def learn(self, s):
@@ -74,10 +73,10 @@ class Actor(object):
 
     def choose_action(self, s):
         s = s[np.newaxis, :]
-        return self.sess.run(self.a, feed_dict={S: s})[0] # single action
+        return self.sess.run(self.a, feed_dict={S: s})[0]  # single action
 
     def add_grad_to_graph(self, a_grads):
-        with tf.variable_scope('policy_grads'): # d_ys/d_xs, d_q / d_a * d_a /d_params, 对每个变量求偏导
+        with tf.variable_scope('policy_grads'):  # d_ys/d_xs, d_q / d_a * d_a /d_params, 对每个变量求偏导
             self.policy_grads = tf.gradients(ys=self.a, xs=self.e_params, grad_ys=a_grads)
 
         with tf.variable_scope('A_train'):
@@ -96,7 +95,7 @@ class Critic(object):
 
         with tf.variable_scope('Critic'):
             # Input (s,a), output q
-            self.a = tf.stop_gradient(a) # stop critic update to actor
+            self.a = tf.stop_gradient(a)  # stop critic update to actor
             self.q = self._build_net(S, self.a, 'eval_net', trainable=True)
 
             # Input (s_, a_), output q_ for q_target
@@ -141,7 +140,7 @@ class Critic(object):
         return q
 
     def learn(self, s, a, r, s_):
-        self.sess.run(self.train_op, feed_dict={S: s, self.a :a, R: r, S_: s_})
+        self.sess.run(self.train_op, feed_dict={S: s, self.a: a, R: r, S_: s_})
         if self.replacement['name'] == 'soft':
             self.sess.run(self.soft_replacement)
         else:
@@ -162,18 +161,24 @@ class Memory(object):
         self.data[index, :] = transition
         self.pointer += 1
 
-    def sample(self, n): # random sampling
+    def sample(self, n):  # random sampling
         assert self.pointer >= self.capacity, 'Memory has not been fulfilled'
         indices = np.random.choice(self.capacity, size=n)
         return self.data[indices, :]
 
-env = gym.make(ENV_NAME)
-env = env.unwrapped
-env.seed(1)
 
-state_dim = env.observation_space.shape[0]
-action_dim = env.action_space.shape[0]
-action_bound = env.action_space.high
+# env = gym.make(ENV_NAME)
+# env = env.unwrapped
+# env.seed(1)
+
+# state_dim = env.observation_space.shape[0]
+# action_dim = env.action_space.shape[0]
+# action_bound = env.action_space.high
+
+env = UnityEnvironment(file_name="tennis.app", seed=1, side_channels=[])
+
+behavior_names = env.behavior_spec.keys()
+
 
 
 with tf.name_scope('S'):
@@ -183,9 +188,7 @@ with tf.name_scope('R'):
 with tf.name_scope('S_'):
     S_ = tf.placeholder(tf.float32, shape=[None, state_dim], name='s_')
 
-
 sess = tf.Session()
-
 
 actor = Actor(sess, action_dim, action_bound, LR_A, REPLACEMENT)
 critic = Critic(sess, state_dim, action_dim, LR_C, GAMMA, REPLACEMENT, actor.a, actor.a_)
@@ -193,7 +196,7 @@ actor.add_grad_to_graph(critic.a_grads)
 
 sess.run(tf.global_variables_initializer())
 
-M = Memory(MEMORY_CAPACITY, dims = 2 * state_dim + action_dim + 1)
+M = Memory(MEMORY_CAPACITY, dims=2 * state_dim + action_dim + 1)
 
 if OUTPUT_GRAPH:
     tf.summary.FileWriter("logs/", sess.graph)
@@ -216,7 +219,7 @@ for i in range(MAX_EPISODES):
         M.store_transition(s, a, r / 10, s_)
 
         if M.pointer > MEMORY_CAPACITY:
-            var *= .9995 # exploration decay
+            var *= .9995  # exploration decay
             b_M = M.sample(BATCH_SIZE)
             b_s = b_M[:, :state_dim]
             b_a = b_M[:, state_dim: state_dim + action_dim]
@@ -235,6 +238,4 @@ for i in range(MAX_EPISODES):
                 RENDER = True
             break
 
-
 print('Running time: ', time.time() - t1)
-
