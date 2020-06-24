@@ -56,6 +56,11 @@ class Agent():
     """Save experience in replay memory, and use random sample from buffer to learn."""
     # Save experience / reward
     self.memory.add(state, action, reward, next_state, done)
+    # Learn, if enough samples are available in memory
+    # use in gym environment
+    if len(self.memory) > BATCH_SIZE:
+      experiences = self.memory.sample()
+      self.learn(experiences, GAMMA)
   
   def act(self, state, add_noise=True):
     """Returns actions for given state as per current policy."""
