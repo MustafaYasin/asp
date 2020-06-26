@@ -25,8 +25,6 @@ for i in range(100):
 
     while True:
 
-        done = not (len(terminal_steps_0) == 0 & len(terminal_steps_1) == 0)
-
         actions_0 = agent.act(states_0)
         actions_1 = agent.act(states_1)
 
@@ -39,6 +37,8 @@ for i in range(100):
             env.get_behavior_names()[0])  # get next state (for each agent)
         decision_steps_1, terminal_steps_1 = env.get_steps(
             env.get_behavior_names()[1])
+
+        done = not (len(terminal_steps_0) == 0 & len(terminal_steps_1) == 0)
 
         # see if episode finished
         if not done:
