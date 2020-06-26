@@ -1,7 +1,7 @@
 # Load the saved weights into Pytorch model
 
 from mlagents_envs.environment import UnityEnvironment
-from ddpg_agent import Agent
+from algo.ddpg_agent import Agent
 import torch
 import numpy as np
 random_seed = 10

@@ -3,7 +3,7 @@ import random
 import copy
 from collections import namedtuple, deque
 
-from asp.algo.model import Actor, Critic
+from algo.model import Actor, Critic
 
 import torch
 import torch.nn.functional as F

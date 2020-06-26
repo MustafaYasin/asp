@@ -1,12 +1,12 @@
 from mlagents_envs.environment import UnityEnvironment
-from ddpg_agent import Agent
+from algo.ddpg_agent import Agent
 import torch
 import time
 import numpy as np
 from collections import deque
 
 env = UnityEnvironment(file_name="/home/Mao/workspace/ATP.ai/tennis_1_area/tennis-original.x86_64", seed=1,
-                       side_channels=[], no_graphics=True)
+                       side_channels=[], no_graphics=False)
 random_seed = 10
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents
 agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
@@ -104,3 +104,5 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
             break
 
     return total_scores
+
+ddpg()
