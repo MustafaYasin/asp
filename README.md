@@ -22,9 +22,12 @@ Configur the slurm script (asp.sh) with your credentials and run it.\
 Start with the traning\
 `python tennis.py`
 
+Evaluate the training result  
+`python eval.py`
+
 
 ### Groupmembers
-[Mustafa Yasin](https://github.com/MustafaYasin)\
-[Xingjian Chen](https://github.com/marcchan)\
-[Yang Mao](https://github.com/leo-mao)\
+[Mustafa Yasin](https://github.com/MustafaYasin)  
+[Xingjian Chen](https://github.com/marcchan)  
+[Yang Mao](https://github.com/leo-mao)  
 [Steffen Brandenburg](https://github.com/SteffenBr)
