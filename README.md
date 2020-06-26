@@ -20,7 +20,7 @@ Configur the slurm script (asp.sh) with your credentials and run it.\
 `sbatch -p All asp.sh`
 
 Start with the traning\
-`python train.py`
+`python tennis.py`
 
 
 ### Groupmembers
