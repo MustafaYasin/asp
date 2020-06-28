@@ -3,7 +3,7 @@ import random
 import copy
 from collections import namedtuple, deque
 
-from asp.algo.model import Actor, Critic
+from algo.model import Actor, Critic
 
 import torch
 import torch.nn.functional as F
@@ -65,8 +65,10 @@ class Agent():
       action = self.actor_local(state).cpu().data.numpy()
     self.actor_local.train()
     if add_noise:
-      action += self.noise.sample()
-    return np.clip(action, -1, 1)
+      action +=5*self.noise.sample()
+      #print(action)
+      #print("clipped",np.interp(action,-1,1))
+    return action
   
   def reset(self):
     self.noise.reset()
@@ -131,6 +133,12 @@ class Agent():
     for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
       target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
 
+  def random_act(self):
+    a=np.random.randn(1,3)
+    return np.interp(a,(0,1),(-1,1))
+
+
+
 
 class OUNoise:
   """Ornstein-Uhlenbeck process."""
@@ -152,7 +160,9 @@ class OUNoise:
     x = self.state
     dx = self.theta * (self.mu - x) + self.sigma * np.array([np.random.randn() for i in range(len(x))])
     self.state = x + dx
+    #print("sampple: ",self.state)
     return self.state
+
 
 
 class ReplayBuffer:

@@ -1,17 +1,17 @@
 from mlagents_envs.environment import UnityEnvironment
-from torch_ddpg_chen.ddpg_agent import Agent
+from algo.ddpg_agent import Agent
 import torch
 import time
 import numpy as np
 from collections import deque
 
-env = UnityEnvironment(file_name="/home/Mao/workspace/ATP.ai/tennis_1_area/tennis-original.x86_64", seed=1,
+env = UnityEnvironment(file_name="tennis2.app", seed=1,
                        side_channels=[])
 random_seed = 10
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents
 agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
 
-def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=0.5):
+def ddpg(n_episodes=20001, max_t=2000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=0.5):
 
     total_scores_deque = deque(maxlen=100)
     total_scores = []
@@ -31,8 +31,8 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
         for t in range(max_t):
 
             actions_0 = agent.act(states_0)
-            actions_1 = agent.act(states_1)
-
+            actions_1 = agent.random_act()
+            #print("actions_0: ", actions_0)
             env.set_actions(behavior_name=env.get_behavior_names()[0], action=actions_0)
             env.set_actions(behavior_name=env.get_behavior_names()[1], action=actions_1)
             env.step()
@@ -43,7 +43,7 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
                 env.get_behavior_names()[1])
             # print(decision_steps_0)
 
-            print(str(terminal_steps_0))
+            #print(str(terminal_steps_0))
 
             next_states_0 = decision_steps_0.obs[0]
             next_states_1 = decision_steps_1.obs[0]
@@ -51,8 +51,8 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
             rewards_0 = decision_steps_0.reward  # get reward (for each agent)
             rewards_1 = decision_steps_1.reward  # get reward (for each agent)
 
-            print("rewards0:", str(rewards_0), "rewards1", str(rewards_1))
-            print("scores:", str(scores))
+            #print("rewards0:", str(rewards_0), "rewards1", str(rewards_1))
+            #print("scores:", str(scores))
             if done:
                 print("rewards0:", str(terminal_steps_0.reward), "rewards1", str(terminal_steps_1.reward))
 
@@ -98,7 +98,7 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
 
-        if total_average_score >= goal_score and i_episode >= 100:
+        if total_average_score >= goal_score and i_episode >= 20000:
             print('Problem Solved after {} epsisodes!! Total Average score: {:.2f}'.format(i_episode,
                                                                                            total_average_score))
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
