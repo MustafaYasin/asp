@@ -20,14 +20,11 @@ Configur the slurm script (asp.sh) with your credentials and run it.\
 `sbatch -p All asp.sh`
 
 Start with the traning\
-`python tennis.py`
-
-Evaluate the training result  
-`python eval.py`
+`python train.py`
 
 
 ### Groupmembers
-[Mustafa Yasin](https://github.com/MustafaYasin)  
-[Xingjian Chen](https://github.com/marcchan)  
-[Yang Mao](https://github.com/leo-mao)  
+[Mustafa Yasin](https://github.com/MustafaYasin)\
+[Xingjian Chen](https://github.com/marcchan)\
+[Yang Mao](https://github.com/leo-mao)\
 [Steffen Brandenburg](https://github.com/SteffenBr)

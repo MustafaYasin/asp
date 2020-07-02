@@ -5,7 +5,7 @@ import time
 import numpy as np
 from collections import deque
 env = UnityEnvironment(file_name="/home/Mao/workspace/ATP.ai/tennis_1_area/tennis-original.x86_64", seed=1,
-                       side_channels=[], no_graphics=True)
+                       side_channels=[], no_graphics=False)
 
 random_seed = 10
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents
@@ -14,7 +14,6 @@ area_num = 1
 agent_num = 2
 
 # scores
-
 def check_done(steps):
     for s in steps:
         if len(s) > 0:
@@ -56,6 +55,7 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
 
             done = check_done(terminal_steps)
 
+
             if not done:
                 for agent_id in range(agent_num):
                     decision_steps[agent_id], terminal_steps[agent_id] = env.get_steps\
@@ -86,9 +86,9 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
 
         # TODO tensorboard加载， 每50个episode的平均时间
 
-# TODO slurm上不同hypopater
+        # TODO slurm上不同hypopater
 
-# TODO evalution
+        # TODO evalution
 
         # Take max of all agents' scores
         # total_scores_deque.append(max_score)
@@ -125,4 +125,4 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
 
     return total_scores
 
-scores = ddpg()
+ddpg()
