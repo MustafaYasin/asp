@@ -4,8 +4,8 @@ import torch
 import time
 import numpy as np
 from collections import deque
-env = UnityEnvironment(file_name="/home/Mao/workspace/ATP.ai/tennis_1_area/tennis-original.x86_64", seed=1,
-                       side_channels=[], no_graphics=False)
+env = UnityEnvironment(file_name="/home/m/mao/workspace/asp/tennis_1_area/tennis-original.x86_64", seed=1,
+                       side_channels=[], no_graphics=True)
 
 random_seed = 10
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents
