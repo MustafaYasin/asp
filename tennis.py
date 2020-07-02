@@ -5,8 +5,10 @@ from algo.ddpg_agent import Agent
 import torch
 import time
 import numpy as np
+from datetime import datetime
+from os import makedirs
 from collections import deque
-env = UnityEnvironment(file_name="/home/m/mao/workspace/asp/tennis_1_area/tennis-original.x86_64", seed=1,
+env = UnityEnvironment(file_name="/home/Mao/workspace/ATP.ai/tennis_1_area/tennis-original.x86_64", seed=1,
                        side_channels=[], no_graphics=True)
 
 random_seed = 10
@@ -15,6 +17,8 @@ agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
 area_num = 1
 agent_num = 2
 
+save_dir = datetime.now().strftime("%d-%H:%M:%S")
+makedirs(save_dir, exist_ok=True)
 # scores
 def check_done(steps):
     for s in steps:
@@ -115,8 +119,8 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
 
 
         if i_episode % save_every == 0:
-            torch.save(agent.actor_local.state_dict(), 'actor_{}.pth'.format(i_episode))
-            torch.save(agent.critic_local.state_dict(), 'critic_{}.pth'.format(i_episode))
+            torch.save(agent.actor_local.state_dict(), '{}/actor_{}.pth'.format(save_dir, i_episode))
+            torch.save(agent.critic_local.state_dict(), '{}/critic_{}.pth'.format(save_dir, i_episode))
 
         # if  i_episode >= 1000:
         #     # print('Problem Solved after {} episodes!! Total Average score: {:.2f}'.format(i_episode,
