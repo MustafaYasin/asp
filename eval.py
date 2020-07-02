@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Load the saved weights into Pytorch model
 
 from mlagents_envs.environment import UnityEnvironment

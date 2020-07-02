@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from mlagents_envs.environment import UnityEnvironment
 from algo.ddpg_agent import Agent
 import torch
