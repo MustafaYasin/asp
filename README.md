@@ -1,5 +1,5 @@
 # Autonome Systeme Praktikum
-[Python](https://www.python.org/downloads/) 3.6.0 is required to run this project
+[Python](https://www.python.org/downloads/) >= 3.6.1 is required to run this project
 
 Login into your cip virtual machine\
 `ssh username@remote.ifi.lmu.de`
