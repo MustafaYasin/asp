@@ -14,7 +14,7 @@ TAU = 2e-1  # for soft update of target parameters
 LR_ACTOR = 1e-4  # learning rate of the actor
 LR_CRITIC = 3e-4  # learning rate of the critic
 WEIGHT_DECAY = 0.0000  # L2 weight decay
-BATCH_SIZE = 512  # minibatch size
+BATCH_SIZE = 1024  # minibatch size
 BUFFER_SIZE = int(1e5)  # replay buffer size
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -47,7 +47,7 @@ class Agent():
     self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
     
     # Noise process
-    self.noise = OUNoise(action_size, random_seed)
+    self.noise = OUNoise(action_size, random_seed, sigma=0.3)
     
     # Replay memory
     self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
@@ -88,6 +88,7 @@ class Agent():
         experiences (Tuple[torch.Tensor]): tuple of (s, a, r, s', done) tuples
         gamma (float): discount factor
     """
+
     states, actions, rewards, next_states, dones = experiences
     
     # ---------------------------- update critic ---------------------------- #
