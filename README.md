@@ -4,27 +4,26 @@
 Login into your cip virtual machine\
 `ssh username@remote.ifi.lmu.de`
 
-Install Anacoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)\
-Install Anaconda on [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)
+**virtual env by conda**  
+Install Anaconda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)
+```
+curl -L https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh > install.sh
+chmod +x install.sh
+./install.sh`
+```
+Create a virtual environment and install dependency via Anaconda \
+`conda create --name asp --file requirements.txt`
 
-Create a virtual Environmet via Anaconda\
-`conda create -n yourenvname python=3.6 anaconda`
+Change the path in both `train.sh` and `tennis.py` then start with the traning\
+`sbatch train.sh`
 
-Activate your Environment\
-`source activate yourenvname`
+Checkout train progress by `squeue -u your_username`, checkout output by `cat run.log`
 
-Install the all needed dependencies\
-`pip install -r requirements.txt`
-
-Configur the slurm script (asp.sh) with your credentials and run it.\
-`sbatch -p All asp.sh`
-
-Start with the traning\
-`python train.py`
-
+or you can use **virtualenv**, but you have to install the env manually and change the `conda activate` into `source activate`
+in `train.sh`
 
 ### Groupmembers
-[Mustafa Yasin](https://github.com/MustafaYasin)\
-[Xingjian Chen](https://github.com/marcchan)\
-[Yang Mao](https://github.com/leo-mao)\
+[Mustafa Yasin](https://github.com/MustafaYasin)  
+[Xingjian Chen](https://github.com/marcchan)  
+[Yang Mao](https://github.com/leo-mao)  
 [Steffen Brandenburg](https://github.com/SteffenBr)
