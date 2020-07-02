@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#SBATCH --job-name=run
+#SBATCH --partition=All
+#SBATCH --mail-type=all
+#SBATCH --mail-user=mao.yang@campus.lmu.de
+#SBATCH --output=run.log
+
+date
+hostname
+
+source /home/m/mao/.bashrc
+conda activate asp
+python /home/m/mao/workspace/asp/tennis.py
