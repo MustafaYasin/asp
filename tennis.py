@@ -19,8 +19,8 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
     for i_episode in range(1, n_episodes + 1):
         # Reset Env and Agent
         env.reset()
-        decision_steps_0, terminal_steps_0 = env.get_steps(env.behavior_specs()[0])
-        decision_steps_1, terminal_steps_1 = env.get_steps(env.behavior_specs()[1])
+        decision_steps_0, terminal_steps_0 = env.get_steps(env.get_behavior_names()[0])
+        decision_steps_1, terminal_steps_1 = env.get_steps(env.get_behavior_names()[1])
         states_0 = decision_steps_0.obs[0]
         states_1 = decision_steps_1.obs[0]
 
