@@ -67,6 +67,10 @@ class Agent():
     if add_noise:
       action += self.noise.sample()
     return np.clip(action, -1, 1)
+
+  def random_act(self):
+    a=np.random.randn(1,3)
+    return np.interp(a,(0,1),(-1,1))
   
   def reset(self):
     self.noise.reset()
