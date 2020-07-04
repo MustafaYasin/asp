@@ -5,7 +5,7 @@ import time
 import numpy as np
 from collections import deque
 
-env = UnityEnvironment(file_name="/home/mustafa/Documents/unity/unity_env/unity_project_2_.x86_64", seed=1,
+env = UnityEnvironment(file_name="/home/mustafa/Desktop/unity_old/unity_project_2_.x86_64", seed=1,
                        side_channels=[], no_graphics=True)
 random_seed = 10
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents

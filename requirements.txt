@@ -5,9 +5,9 @@ grpcio==1.29.0
 gym==0.17.2
 
 # Editable install with no version control (gym-unity==0.16.1)
--e /home/mustafa/Documents/unity/ml-agents-release_3/gym-unity
+-e /home/mustafa/Desktop/unity_old/ml-agents-release_2/gym-unity
 # Editable install with no version control (mlagents-envs==0.16.1)
--e /home/mustafa/Documents/unity/ml-agents-release_3/ml-agents-envs
+-e /home/mustafa/Desktop/unity_old/ml-agents-release_2/ml-agents-envs
 
 numpy==1.18.5
 Pillow==7.1.2
