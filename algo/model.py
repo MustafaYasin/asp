@@ -15,7 +15,7 @@ def hidden_init(layer):
 
 class Actor(nn.Module):
   """Actor (Policy) Model."""
-  
+
   def __init__(self, state_size, action_size, seed, fc1_units=512, fc2_units=256):
     """Initialize parameters and build model.
     Params
@@ -29,8 +29,13 @@ class Actor(nn.Module):
     super(Actor, self).__init__()
     self.seed = torch.manual_seed(seed)
     self.fc1 = nn.Linear(state_size, fc1_units)
-    
+    self.rl1 = nn.ReLU()
+    self.dense_bn1 = nn.BatchNorm1d(fc1_units)
+    self.dp1 = nn.Dropout(0.5)
     self.fc2 = nn.Linear(fc1_units, fc2_units)
+    self.rl2 = nn.ReLU()
+    self.dense_bn2 = nn.BatchNorm1d(fc2_units)
+    self.dp1 = nn.Dropout(0.5)
     self.fc3 = nn.Linear(fc2_units, action_size)
     self.reset_parameters()
   
@@ -48,8 +53,9 @@ class Actor(nn.Module):
 
 class Critic(nn.Module):
   """Critic (Value) Model."""
-  
-  def __init__(self, state_size, action_size, seed, fcs1_units=512, fc2_units=256, dropout=0.2):
+
+  def __init__(self, state_size, action_size, seed, fcs1_units=512, fc2_units=256, dropout=0.5):
+
     """Initialize parameters and build model.
     Params
     ======
@@ -59,12 +65,18 @@ class Critic(nn.Module):
         fcs1_units (int): Number of nodes in the first hidden layer
         fc2_units (int): Number of nodes in the second hidden layer
     """
+
     super(Critic, self).__init__()
     self.seed = torch.manual_seed(seed)
     self.dropout = nn.Dropout(p=dropout)
     self.fcs1 = nn.Linear(state_size, fcs1_units)
-    
+    self.rl1 = nn.ReLU()
+    self.dense_bn1 = nn.BatchNorm1d(fcs1_units + action_size)
+    self.dropout = nn.Dropout(p=dropout)
     self.fc2 = nn.Linear(fcs1_units + action_size, fc2_units)
+    self.rl1 = nn.ReLU()
+    self.dense_bn1 = nn.BatchNorm1d(fc2_units)
+    self.dropout = nn.Dropout(p=dropout)
     self.fc3 = nn.Linear(fc2_units, 1)
     self.reset_parameters()
   
