@@ -9,7 +9,7 @@ from algo.ddpg_agent import Agent
 from datetime import datetime
 from os import makedirs
 from collections import deque
-env = UnityEnvironment(file_name="/home/Mao/workspace/ATP.ai/tennis_1_area/tennis-original.x86_64", seed=1,
+env = UnityEnvironment(file_name="tennis_1_area/tennis-original.x86_64", seed=1,
                        side_channels=[], no_graphics=True)
 
 random_seed = 10
@@ -18,7 +18,7 @@ agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
 area_num = 1
 agent_num = 2
 
-save_dir = datetime.now().strftime("%m%d_%H:%M:%S")
+save_dir = datetime.now().strftime("%m%d_%H:%M")
 makedirs(save_dir, exist_ok=True)
 # scores
 def check_done(steps):
