@@ -10,8 +10,10 @@ random_seed = 10
 
 agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
 
-agent.actor_local.load_state_dict(torch.load('actor_450.pth', map_location='cpu'))
-agent.critic_local.load_state_dict(torch.load('critic_450.pth', map_location='cpu'))
+trained = torch.load('/home/Mao/workspace/ATP.ai/06-13:49:17/a-c_200.pth', map_location='cpu')
+agent.actor_local.load_state_dict(trained['actor_static'])
+agent.critic_local.load_state_dict(trained['critic_static'])
+
 env = UnityEnvironment(file_name="/home/Mao/workspace/ATP.ai/tennis_1_area/tennis-original.x86_64", seed=1,
                        side_channels=[], no_graphics=False)
 area_num = 2
