@@ -5,13 +5,13 @@ import time
 import numpy as np
 from collections import deque
 
-env = UnityEnvironment(file_name="tennis_hit.app", seed=1,
+env = UnityEnvironment(file_name="tennis_hit2.app", seed=1,
                        side_channels=[], no_graphics=False)
 random_seed = 10
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents
 agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
-agent.actor_local.load_state_dict(torch.load('hit_actor.pth', map_location='cpu',))
-agent.critic_local.load_state_dict(torch.load('hit_critic.pth', map_location='cpu',))
+#agent.actor_local.load_state_dict(torch.load('hit_actor.pth', map_location='cpu',))
+#agent.critic_local.load_state_dict(torch.load('hit_critic.pth', map_location='cpu',))
 
 
 
