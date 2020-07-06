@@ -1,7 +1,7 @@
 from unityagents import UnityEnvironment
 import numpy as np
 import torch
-from asp.ddpg_agent import Agent
+from asp.algo.ddpg_agent import Agent
 
 random_seed = 7
 
