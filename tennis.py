@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from mlagents_envs.environment import UnityEnvironment
-from algo.ddpg_agent import Agent
 import torch
 import time
 import numpy as np
+import matplotlib.pyplot as plt
+from mlagents_envs.environment import UnityEnvironment
+from algo.ddpg_agent import Agent
 from datetime import datetime
 from os import makedirs
 from collections import deque
@@ -17,7 +18,7 @@ agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
 area_num = 1
 agent_num = 2
 
-save_dir = datetime.now().strftime("%d-%H:%M:%S")
+save_dir = datetime.now().strftime("%m%d_%H:%M:%S")
 makedirs(save_dir, exist_ok=True)
 # scores
 def check_done(steps):
@@ -27,9 +28,11 @@ def check_done(steps):
     return False
 
 
-def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_every=5, num_learn=10):
+def ddpg(n_episodes=20000, max_t=2000, print_every=50, save_every=50, learn_every=5, num_learn=10):
 
     total_scores_deque = deque(maxlen=n_episodes)
+    total_critic_losses = []
+    total_actor_losses = []
     total_scores = []
     decision_steps = [0] * agent_num
     terminal_steps = [0] * agent_num
@@ -37,7 +40,7 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
     states = [0] * agent_num
     next_states = [0] * agent_num
     rewards = [0] * agent_num
-
+    critic_loss, actor_loss = 0, 0
     for i_episode in range(1, n_episodes + 1):
         # Reset Env and Agent
         env.reset()
@@ -50,9 +53,11 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
         start_time = time.time()
 
         for t in range(max_t):
-            for agent_id in range(agent_num):
 
-                actions[agent_id] = agent.act(states[agent_id])
+            states = np.array(states)
+            actions = agent.act(states)
+
+            for agent_id in range(agent_num):
                 env.set_actions(behavior_name=env.get_behavior_names()[agent_id], action=actions[agent_id])
             env.step()
 
@@ -69,7 +74,8 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
                     next_states[agent_id] = decision_steps[agent_id].obs[0]
                     rewards[agent_id] = decision_steps[agent_id].reward  # get reward (for each agent)
 
-                    # scores += np.concatenate((decision_steps[].reward, decision_steps_1.reward), axis=0)  # update the score (for each agent)
+                    # scores += np.concatenate((decision_steps[].reward, decision_steps_1.reward), axis=0)
+                    # update the score (for each agent)
 
             else:
                 # scores += np.concatenate((terminal_steps_0.reward, terminal_steps_1.reward), axis=0)
@@ -79,30 +85,24 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
 
 
             for agent_id in range(agent_num):
-                for state, action, reward, next_state in zip(states[agent_id], actions[agent_id], rewards[agent_id], next_states[agent_id]):
+                for state, action, reward, next_state in zip(states[agent_id], actions[agent_id], rewards[agent_id],
+                                                             next_states[agent_id]):
                     agent.step(state, action, reward, next_state, done)  # send actions to the agent and save
 
             states = next_states  # roll over states to next time step
 
             if t % learn_every == 0:
                 for _ in range(num_learn):
-                    agent.start_learn()
+                    critic_loss, actor_loss = agent.start_learn()
             if done:
                 break
 
-        # TODO tensorboard加载， 每50个episode的平均时间
-
-        # TODO slurm上不同hypopater
-
-        # TODO evalution
-
-        # Take max of all agents' scores
-        # total_scores_deque.append(max_score)
-        # total_scores.append(max_score)
-        # total_average_score = np.mean(total_scores_deque)
 
         duration = time.time() - start_time
         total_scores.append(duration)
+        total_critic_losses.append(critic_loss * 1e3)
+        total_actor_losses.append(actor_loss * 1e3)
+
 
 
         print('Epoch {}: {}s'.format(i_episode, duration))
@@ -119,8 +119,13 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
 
 
         if i_episode % save_every == 0:
-            torch.save(agent.actor_local.state_dict(), '{}/actor_{}.pth'.format(save_dir, i_episode))
-            torch.save(agent.critic_local.state_dict(), '{}/critic_{}.pth'.format(save_dir, i_episode))
+            torch.save({'episode': i_episode,
+                        'actor_static': agent.actor_local.state_dict(),
+                        'actor_loss':total_actor_losses,
+                        'critic_static': agent.critic_local.state_dict(),
+                        'critic_loss':total_critic_losses,
+                        'total_score': total_scores
+                        }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
 
         # if  i_episode >= 1000:
         #     # print('Problem Solved after {} episodes!! Total Average score: {:.2f}'.format(i_episode,
@@ -129,6 +134,20 @@ def ddpg(n_episodes=200000, max_t=2000, print_every=50, save_every=50, learn_eve
         #     torch.save(agent.critic_local.state_dict(), 'checkpoint_critic_old.pth')
         #     break
 
-    return total_scores
+    return total_scores, total_critic_losses, total_actor_losses
 
-ddpg()
+
+total_scores, total_critic_losses, total_actor_losses = ddpg()
+
+plt.plot(total_scores, label='total_scores')
+# plt.plot(test_losses_mean, label='test_loss_mean')
+plt.plot(total_critic_losses, label='total_critic_losses')
+# plt.plot(test_stress_losses_mean, label='test_stress_losses_mean')
+plt.plot(total_actor_losses, label='total_actor_losses')
+plt.legend(('total_scores',
+            'total_critic_losses',
+            'total_actor_losses'
+            ),
+          loc='upper right', shadow=True)
+# plt.yscale("log")
+plt.show()
