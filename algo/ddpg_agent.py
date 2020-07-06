@@ -37,7 +37,7 @@ class Agent():
     self.state_size = state_size
     self.action_size = action_size
     self.seed = random.seed(random_seed)
-    
+    # self.learn_started = False
     # Actor Network (w/ Target Network)
     self.actor_local = Actor(state_size, action_size, random_seed).to(device)
     self.actor_target = Actor(state_size, action_size, random_seed).to(device)
@@ -61,23 +61,26 @@ class Agent():
   
   def act(self, state, add_noise=True):
     """Returns actions for given state as per current policy."""
-    state = torch.from_numpy(state).float().to(device)
-    self.actor_local.eval()
+    state = torch.from_numpy(state).float().to(device) # 把输入的numpy数组，转换成cuda 的数据格式
+    self.actor_local.eval() # actor_local就是两个actor神经网络中的一个，eval就是让神经网络进入预测模式
     with torch.no_grad():
-      action = self.actor_local(state).cpu().data.numpy()
-    self.actor_local.train()
+      action = self.actor_local(state).cpu().data.numpy() # 输入state，返回动作
+    self.actor_local.train() # 让神经网络进入训练模式
     if add_noise:
-      action += self.noise.sample()
+      action += self.noise.sample() # 给动作加噪声
     return np.clip(action, -1, 1)
   
   def reset(self):
     self.noise.reset()
   
   def start_learn(self):
+    critic_loss, actor_loss = 0, 0
     if len(self.memory) > BATCH_SIZE:
       experiences = self.memory.sample()
-      self.learn(experiences, GAMMA)
-  
+      critic_loss, actor_loss = self.learn(experiences, GAMMA)
+
+    return critic_loss, actor_loss
+
   def learn(self, experiences, gamma):
     """Update policy and value parameters using given batch of experience tuples.
     Q_targets = r + γ * critic_target(next_state, actor_target(next_state))
@@ -120,6 +123,8 @@ class Agent():
     # ----------------------- update target networks ----------------------- #
     self.soft_update(self.critic_local, self.critic_target, TAU)
     self.soft_update(self.actor_local, self.actor_target, TAU)
+
+    return critic_loss, actor_loss
   
   def soft_update(self, local_model, target_model, tau):
     """Soft update model parameters.
