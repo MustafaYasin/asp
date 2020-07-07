@@ -4,24 +4,34 @@ import torch
 import time
 import numpy as np
 from collections import deque
+import matplotlib.pyplot as plt
 
-env = UnityEnvironment(file_name="tennis_hit2.app", seed=1,
-                       side_channels=[], no_graphics=False)
+env = UnityEnvironment(file_name="tennis_single.app", seed=1,
+                       side_channels=[], no_graphics=True)
 random_seed = 10
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents
 agent = Agent(state_size=27, action_size=3, random_seed=random_seed)
-#agent.actor_local.load_state_dict(torch.load('hit_actor.pth', map_location='cpu',))
-#agent.critic_local.load_state_dict(torch.load('hit_critic.pth', map_location='cpu',))
+agent.actor_local.load_state_dict(torch.load('checkpoint_actor.pth', map_location='cpu',))
+agent.critic_local.load_state_dict(torch.load('checkpoint_critic.pth', map_location='cpu',))
 
 
 
-def ddpg(n_episodes=20001, max_t=2000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=0.7):
-
+def ddpg(
+    n_episodes=2000,
+    max_t=2000,
+    print_every=5,
+    save_every=50,
+    learn_every=1,
+    num_learn=10,
+    goal_score=0.7):
     total_scores_deque = deque(maxlen=100)
     total_scores = []
+    rewards = []
+    avg_rewards = []
 
     for i_episode in range(1, n_episodes + 1):
         # Reset Env and Agent
+        episode_reward = 0
         env.reset()
         decision_steps_0, terminal_steps_0 = env.get_steps(env.get_behavior_names()[0])
         decision_steps_1, terminal_steps_1 = env.get_steps(env.get_behavior_names()[1])
@@ -51,28 +61,28 @@ def ddpg(n_episodes=20001, max_t=2000, print_every=5, save_every=50, learn_every
 
             if not done:
                 next_states_0 = decision_steps_0.obs[0]
-                next_states_1 = decision_steps_1.obs[0]
+                #next_states_1 = decision_steps_1.obs[0]
 
                 rewards_0 = decision_steps_0.reward  # get reward (for each agent)
-                rewards_1 = decision_steps_1.reward  # get reward (for each agent)
+                #rewards_1 = decision_steps_1.reward  # get reward (for each agent)
                 scores += np.concatenate((decision_steps_0.reward, decision_steps_1.reward), axis=0)  # update the score (for each agent)
             else:
                 scores += np.concatenate((terminal_steps_0.reward, terminal_steps_1.reward), axis=0)
                 next_states_0 = terminal_steps_0.obs[0]
-                next_states_1 = terminal_steps_1.obs[0]
+                #next_states_1 = terminal_steps_1.obs[0]
 
                 rewards_0 = terminal_steps_0.reward  # get reward (for each agent)
-                rewards_1 = terminal_steps_1.reward  # get reward (for each agent)
-
+                #rewards_1 = terminal_steps_1.reward  # get reward (for each agent)
+                episode_reward += rewards_0
                 print(scores)
 
             for state, action, reward, next_state in zip(states_0, actions_0, rewards_0, next_states_0):
                 agent.step(state, action, reward, next_state, done)  # send actions to the agent and save
-            for state, action, reward, next_state in zip(states_1, actions_1, rewards_1, next_states_1):
-                agent.step(state, action, reward, next_state, done)  # send actions to the agent and save
+            #for state, action, reward, next_state in zip(states_1, actions_1, rewards_1, next_states_1):
+            #    agent.step(state, action, reward, next_state, done)  # send actions to the agent and save
 
             states_0 = next_states_0  # roll over states to next time step
-            states_1 = next_states_1  # roll over states to next time step
+            #states_1 = next_states_1  # roll over states to next time step
 
             if t % learn_every == 0:
                 for _ in range(num_learn):
@@ -99,13 +109,21 @@ def ddpg(n_episodes=20001, max_t=2000, print_every=5, save_every=50, learn_every
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
 
-        if  i_episode >= 20000:
+        if  i_episode >= 1999:
             print('Problem Solved after {} epsisodes!! Total Average score: {:.2f}'.format(i_episode,
                                                                                            total_average_score))
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
             break
+        rewards.append(episode_reward)
+        avg_rewards.append(np.mean(rewards[-50:]))
+
+    #plt.plot(rewards)
+    plt.plot(avg_rewards)
+    plt.plot()
+    plt.xlabel('Episode')
+    plt.ylabel('Reward')
+    plt.show()
 
     return total_scores
-
 ddpg()
