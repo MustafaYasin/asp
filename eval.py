@@ -1,15 +1,16 @@
 from unityagents import UnityEnvironment
 import numpy as np
 import torch
-from asp.algo.ddpg_agent import Agent
+from algo.ddpg_agent import Agent
 
 random_seed = 7
 
+env = UnityEnvironment(file_name="Tennis_Linux/Tennis.x86_64")
+# env = UnityEnvironment(file_name="Tennis_old.app")
 
-env = UnityEnvironment(file_name="Tennis_old.app")
 agent = Agent(state_size=24, action_size=2, random_seed=random_seed)
-agent.actor_local.load_state_dict(torch.load('checkpoint_actor.pth', map_location='cpu'))
-agent.critic_local.load_state_dict(torch.load('checkpoint_critic.pth', map_location='cpu'))
+agent.actor_local.load_state_dict(torch.load('checkpoint_actor_300.pth', map_location='cpu'))
+agent.critic_local.load_state_dict(torch.load('checkpoint_critic_300.pth', map_location='cpu'))
 brain_name = env.brain_names[0]
 env_info = env.reset(train_mode=True)[brain_name]
 num_agents = len(env_info.agents)

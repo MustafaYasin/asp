@@ -1,15 +1,16 @@
 from unityagents import UnityEnvironment
 import numpy as np
-from asp.algo.ddpg_agent import Agent
+from algo.ddpg_agent import Agent
 import torch
-import random
 import time
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import deque
 
 
-env = UnityEnvironment(file_name="Tennis_old.app", no_graphics= True)
+env = UnityEnvironment(file_name="Tennis_Linux/Tennis.x86_64", no_graphics= True)
+# env = UnityEnvironment(file_name="Tennis_old.app")
+
 # get the default brain
 brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
@@ -47,13 +48,13 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
 
     for t in range(max_t):
       actions = agent.act(states)
-      print('actions:{}'.format(actions))
+      # print('actions:{}'.format(actions))
       env_info = env.step(actions)[brain_name]  # send all actions to the environment
       next_states = env_info.vector_observations  # get next state (for each agent)
       rewards = env_info.rewards  # get reward (for each agent)
       # print(rewards)
       dones = env_info.local_done  # see if episode finished
-      print('dones:{}'.format(dones))
+      # print('dones:{}'.format(dones))
       for state, action, reward, next_state, done in zip(states, actions, rewards, next_states, dones):
         agent.step(state, action, reward, next_state, done)  # send actions to the agent
 
@@ -83,8 +84,8 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
           i_episode, total_average_score, mean_score, min_score, max_score, duration))
 
     if i_episode % save_every == 0:
-      torch.save(agent.actor_local.state_dict(), 'pthLog/checkpoint_actor_{}.pth'.format(i_episode))
-      torch.save(agent.critic_local.state_dict(), 'pthLog/checkpoint_critic_{}.pth'.format(i_episode))
+      torch.save(agent.actor_local.state_dict(), 'checkpoint_actor_{}.pth'.format(i_episode))
+      torch.save(agent.critic_local.state_dict(), 'checkpoint_critic_{}.pth'.format(i_episode))
 
     if total_average_score >= goal_score and i_episode >= 100:
       print('Problem Solved after {} epsisodes!! Total Average score: {:.2f}'.format(i_episode, total_average_score))
