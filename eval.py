@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from unityagents import UnityEnvironment
 import numpy as np
 import torch
