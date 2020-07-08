@@ -3,10 +3,10 @@ import torch as T
 
 actor_loss = []
 critic_loss = []
-# change the pass to the output file to draw the training loss and score diagram
+# change the path to the output file to draw the training loss and score diagram
 path = "0707_21:36/a-c_50.pth"
 trained = T.load(path, map_location='cpu')
-# total_scores = trained['score']
+
 total_actor_losses = trained['actor_loss']
 total_critic_losses = trained['critic_loss']
 total_scores = trained['total_score']
