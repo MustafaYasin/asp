@@ -11,18 +11,17 @@ env = UnityEnvironment(file_name="Tennis_Linux/Tennis.x86_64")
 
 agent = Agent(state_size=24, action_size=2, random_seed=random_seed)
 
-trained = torch.load("0707_21:36/a-c_50.pth", map_location='cpu')
+trained = torch.load("a-c_853.pth", map_location='cpu')
 
 agent.actor_local.load_state_dict(trained['actor_static'])
 agent.critic_local.load_state_dict(trained['critic_static'])
 
-
 brain_name = env.brain_names[0]
-env_info = env.reset(train_mode=True)[brain_name]
-num_agents = len(env_info.agents)
+
 for i in range(100):                                         # play game for 100 episodes
     env_info = env.reset(train_mode=False)[brain_name]     # reset the environment
     states = env_info.vector_observations                  # get the current state (for each agent)
+    num_agents = len(env_info.agents)
     scores = np.zeros(num_agents)                          # initialize the score (for each agent)
     while True:
         actions = agent.act(states)                        # select actions from loaded model agent
