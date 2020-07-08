@@ -17,7 +17,7 @@ agent.critic_local.load_state_dict(torch.load('checkpoint_critic.pth', map_locat
 
 
 def ddpg(
-    n_episodes=2000,
+    n_episodes=2001,
     max_t=2000,
     print_every=5,
     save_every=50,
@@ -28,6 +28,8 @@ def ddpg(
     total_scores = []
     rewards = []
     avg_rewards = []
+    avg_rewards2 = []
+
 
     for i_episode in range(1, n_episodes + 1):
         # Reset Env and Agent
@@ -109,7 +111,7 @@ def ddpg(
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
 
-        if  i_episode >= 1999:
+        if  i_episode >= 2000:
             print('Problem Solved after {} epsisodes!! Total Average score: {:.2f}'.format(i_episode,
                                                                                            total_average_score))
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
@@ -117,9 +119,12 @@ def ddpg(
             break
         rewards.append(episode_reward)
         avg_rewards.append(np.mean(rewards[-50:]))
+        avg_rewards2.append(np.mean(rewards[-200:]))
+
 
     #plt.plot(rewards)
     plt.plot(avg_rewards)
+    plt.plot(avg_rewards2)
     plt.plot()
     plt.xlabel('Episode')
     plt.ylabel('Reward')
