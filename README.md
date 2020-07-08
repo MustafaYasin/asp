@@ -2,7 +2,7 @@
 [Python](https://www.python.org/downloads/) 3.6.10 is required to run this project
 
 #Suggestion: using conda env/venv
-Install Anacoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)\
+Install Anacnoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)\
 Install Anaconda on [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)
 
 Create a virtual Environmet via Anaconda\
@@ -14,18 +14,14 @@ Activate your Environment\
 Install the all needed dependencies\
 `pip install -r requirements.txt`
 
-Configur the slurm script (asp.sh) with your credentials and run it.\
-`sbatch -p All asp.sh`
-
 Start with the traning\
-`python train.py`
+`sbatch train.sh`
 
 ### Notice
 the version of mlagents is 0.4.0. Source code: (https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0)
 
 ## Environment:
 The 3D environment contains 2 tennis agents who can move forward, backward or jump.
-
 
 
 ### Groupmembers
