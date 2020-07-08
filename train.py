@@ -3,6 +3,7 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 from datetime import datetime
 from os import makedirs
 from unityagents import UnityEnvironment
@@ -32,9 +33,9 @@ print('There are {} agents. Each observes a state with length: {}'.format(states
 print('The state for the first agent looks like:', states[0])
 random_seed = 7
 train_mode = True
-
 # Create one brain agent having one Reply memory buffer collecting experience from both tennis agents
 agent = Agent(state_size=state_size, action_size=action_size, random_seed=random_seed)
+
 save_dir = datetime.now().strftime("%m%d_%H:%M")
 makedirs(save_dir, exist_ok=True)
 
@@ -73,10 +74,12 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
       states = next_states  # roll over states to next time step
       
       if t % learn_every == 0:
+        a_l, c_l = 0, 0
         for _ in range(num_learn):
           a_l, c_l = agent.start_learn()
-          actor_losses.append(a_l * 1e3)
-          critic_losses.append(c_l * 1e3)
+        # potential memory leak
+        actor_losses.append(a_l * 1e3)
+        critic_losses.append(c_l * 1e3)
 
       if np.any(dones):  # exit loop if episode finished
         break
@@ -107,8 +110,7 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
                   'total_score': total_scores
                   }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
 
-
-    if total_average_score >= 0.8 and i_episode >= 100:
+    if total_average_score >= goal_score and i_episode >= 100:
       print('Problem Solved after {} epsisodes!! Total Average score: {:.2f}'.format(i_episode, total_average_score))
       torch.save({'episode': i_episode,
                   'actor_static': agent.actor_local.state_dict(),
@@ -118,7 +120,6 @@ def ddpg(n_episodes=2000, max_t=2000, print_every=5, save_every=50, learn_every=
                   'total_score': total_scores
                   }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
       break
-
   return total_scores
 
 
