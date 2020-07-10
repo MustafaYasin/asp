@@ -1,7 +1,7 @@
 # Autonome Systeme Praktikum
 [Python](https://www.python.org/downloads/) 3.6.10 is required to run this project
 
-#Suggestion: using conda env/venv
+Suggestion: using conda env/venv
 Install Anacnoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)\
 Install Anaconda on [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)
 
