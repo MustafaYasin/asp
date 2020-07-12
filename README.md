@@ -47,7 +47,7 @@ the version of mlagents is 0.4.0. Source code: (https://github.com/Unity-Technol
         * obs[.][21]:  Relative position of ball and field in Y axis
         * obs[.][22]:  Velocity of the ball in X axis
         * obs[.][23]:  Velocity of the ball in Y axis
-        * C# code:     
+        * source code: (ml-agents-0.4.0/unity-environment/Assets/ML-Agents/Examples/Tennis/Scripts/TennisAgent.cs): 
         
             ```java
                 public override void CollectObservations(){
