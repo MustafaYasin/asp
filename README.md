@@ -20,11 +20,10 @@ Start with the traning\
 # Project Introduction
 
 ## *Environment*:
-### Notice
-the version of mlagents is 0.4.0. Source code: (https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0)
 
 ![Tennis](img/tennis.png)
 
+`mlagents==`[0.4.0](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0)
 
 * Set-up: Two-player game where agents control rackets to bounce ball over a net. 
 * Goal: The agents must bounce ball between one another while not dropping or sending ball out of bounds.
@@ -66,7 +65,7 @@ the version of mlagents is 0.4.0. Source code: (https://github.com/Unity-Technol
             ```
                       
     * Vector Action space: (Continuous) Size of 2, corresponding to movement toward net or away from net, and jumping.
-         * `shape`: `(2, 2)`  means the env has 2 agents, 
+         * `shape`: `(2, 2)`  the env has 2 agents, 
          * `vectorAction[0]`: action for left side player
          * `vectorAction[1]`: action for right side player  
          * take the `vectorAction[0]` for example:
@@ -78,6 +77,7 @@ the version of mlagents is 0.4.0. Source code: (https://github.com/Unity-Technol
 ## Training
 ### Algorithm: *DDPG*
 TODO
+
 
 ### Description:
 * max Reward:the max reward in a episode, for example: `max Reward = 2.5` that means the reward of two players in a game = [2.5, 2.4] or [2.4, 2.5]
