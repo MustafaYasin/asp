@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import random
 import copy
 from collections import namedtuple, deque
 
-from asp.algo.model import Actor, Critic
+from algo.model import Actor, Critic
 
 import torch
 import torch.nn.functional as F
@@ -23,7 +25,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class Agent:
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, random_seed):
+    def __init__(self, state_size, action_size, random_seed, buffer_size=BUFFER_SIZE,
+                 batch_size=BATCH_SIZE, mu=0., theta=0.15, sigma=0.2):
         """Initialize an Agent object.
 
         Params
@@ -47,10 +50,10 @@ class Agent:
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
 
         # Noise process
-        self.noise = OUNoise(action_size, random_seed)
+        self.noise = OUNoise(action_size, random_seed, mu=mu, theta=theta, sigma=sigma)
 
         # Replay memory
-        self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
+        self.memory = ReplayBuffer(action_size, buffer_size, batch_size, random_seed)
 
     def step(self, state, action, reward, next_state, done):
         """Save experience in replay memory, and use random sample from buffer to learn."""
@@ -72,9 +75,11 @@ class Agent:
         self.noise.reset()
 
     def start_learn(self):
+        a_l, c_l = None, None
         if len(self.memory) > BATCH_SIZE:
             experiences = self.memory.sample()
-            self.learn(experiences, GAMMA)
+            a_l, c_l = self.learn(experiences, GAMMA)
+        return (a_l, c_l) if a_l and c_l else (0, 0)
 
     def learn(self, experiences, gamma):
         """Update policy and value parameters using given batch of experience tuples.
@@ -117,6 +122,7 @@ class Agent:
         # ----------------------- update target networks ----------------------- #
         self.soft_update(self.critic_local, self.critic_target, TAU)
         self.soft_update(self.actor_local, self.actor_target, TAU)
+        return actor_loss, critic_loss
 
     def soft_update(self, local_model, target_model, tau):
         """Soft update model parameters.
