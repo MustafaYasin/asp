@@ -21,7 +21,8 @@ Start with the traning\
 
 ## *Environment*:
 
-![Tennis](img/tennis-demo.png)
+![Tennis](img/tennis-demo.gif)
+
 
 `mlagents==`[0.4.0](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0)
 
