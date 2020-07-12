@@ -1,5 +1,6 @@
 # Autonome Systeme Praktikum
 [Python](https://www.python.org/downloads/) 3.6.10 is required to run this project
+[mlagents](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0) 0.4.0 is required to run this project
 ## Suggestion: using conda env/venv
 Install Anacoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)\
 Install Anaconda on [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)
@@ -19,12 +20,7 @@ Start with the traning\
 
 # Project Introduction
 
-## *Environment*:
-
 ![Tennis](img/tennis-demo.gif)
-
-
-`mlagents==`[0.4.0](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0)
 
 * Set-up: Two-player game where agents control rackets to bounce ball over a net. 
 * Goal: The agents must bounce ball between one another while not dropping or sending ball out of bounds.
