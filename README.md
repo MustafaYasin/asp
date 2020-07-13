@@ -22,13 +22,13 @@ Start with the traning\
 
 ![Tennis](img/tennis-demo.gif)
 
-* Set-up: Two-player game where agents control rackets to bounce ball over a net. 
-* Goal: The agents must bounce ball between one another while not dropping or sending ball out of bounds.
-* Agents: The environment contains two agent linked to a single brain named TennisBrain. 
-* Agent Reward Function (independent): 
+* **Set-up**: Two-player game where agents control rackets to bounce ball over a net. 
+* **Goal**: The agents must bounce ball between one another while not dropping or sending ball out of bounds.
+* **Agents**: The environment contains two agent linked to a single brain named TennisBrain. 
+* **Agent Reward Function (independent)**: 
     * +0.1 To agent when hitting ball over net.
     * -0.1 To agent who let ball hit their ground, or hit ball out of bounds.
-* Brains: One brain with the following observation/action space.
+* **Brains**: One brain with the following observation/action space.
     * Vector Observation space: (Continuous) 8 variables corresponding to position and velocity of ball and racket.  
         * `shape`: `(2, 24)` means the env has 2 agents, Each observes a state with length 24. 
         * `obs[0]`: the observation of the left side player 
@@ -77,7 +77,7 @@ TODO
 
 
 ### Description:
-* max Reward:the max reward in a episode, for example: `max Reward = 2.5` that means the reward of two players in a game = [2.5, 2.4] or [2.4, 2.5]
+* Max Reward:the max reward in a episode, for example: `max Reward = 2.5` that means the reward of two players in a game = [2.5, 2.4] or [2.4, 2.5]
 * Score: a list contain the max Reward in each game, could be saved in "pth" File, and load to see the change in plot.
 * Total Average Score: calculated from the average scores of last 100 episodes, we take it as an indicator for the training
 
@@ -88,7 +88,7 @@ TODO
 4. **Result**: should be save as *figure*    
     
 
-## Groupmembers
+### Groupmembers
 [Mustafa Yasin](https://github.com/MustafaYasin)\
 [Xingjian Chen](https://github.com/marcchan)\
 [Yang Mao](https://github.com/leo-mao)\
