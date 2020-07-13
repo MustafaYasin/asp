@@ -1,5 +1,5 @@
 # Autonome Systeme Praktikum
-[Python](https://www.python.org/downloads/) 3.6.10 is required to run this project
+[Python](https://www.python.org/downloads/) 3.6.10 is required to run this project\
 [mlagents](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0) 0.4.0 is required to run this project
 ## Suggestion: using conda env/venv
 Install Anacoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/)\
