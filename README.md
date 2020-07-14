@@ -94,7 +94,7 @@ TODO
 
 
 ### Contributors
-* [Mustafa Yasin](https://github.com/MustafaYasin)\
-* [Xingjian Chen](https://github.com/marcchan)\
-* [Yang Mao](https://github.com/leo-mao)\
-* [Steffen Brandenburg](https://github.com/SteffenBr)\
+* [Mustafa Yasin](https://github.com/MustafaYasin)
+* [Xingjian Chen](https://github.com/marcchan)
+* [Yang Mao](https://github.com/leo-mao)
+* [Steffen Brandenburg](https://github.com/SteffenBr)
