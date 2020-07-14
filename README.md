@@ -88,13 +88,13 @@ TODO
 4. **Result**: should be save as *figure*    
     
 ### Relevant Papers
-* [Deterministic Policy Gradient Algorithms] (http://proceedings.mlr.press/v32/silver14.pdf), Lillicrap et al. 2016\
-* [Continuous Control with Deep Reinforcement Learning] (https://arxiv.org/pdf/1509.02971.pdf), Silver et al. 2014
+* [Deterministic Policy Gradient Algorithms](http://proceedings.mlr.press/v32/silver14.pdf), Lillicrap et al. 2016
+* [Continuous Control with Deep Reinforcement Learning](https://arxiv.org/pdf/1509.02971.pdf), Silver et al. 2014
 
 
 
 ### Contributors
-[Mustafa Yasin](https://github.com/MustafaYasin)\
-[Xingjian Chen](https://github.com/marcchan)\
-[Yang Mao](https://github.com/leo-mao)\
-[Steffen Brandenburg] (https://github.com/SteffenBr)
+* [Mustafa Yasin](https://github.com/MustafaYasin)\
+* [Xingjian Chen](https://github.com/marcchan)\
+* [Yang Mao](https://github.com/leo-mao)\
+* [Steffen Brandenburg](https://github.com/SteffenBr)\
