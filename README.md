@@ -5,7 +5,7 @@
 Install Anacoda on [Linux] (https://docs.anaconda.com/anaconda/install/linux/)\
 Install Anaconda on [MacOS] (https://docs.anaconda.com/anaconda/install/mac-os/)
 
-Create a virtual Environmet via Anaconda\
+Create a virtual Environment via Anaconda\
 `conda create -n yourenvname python=3.6.10 anaconda`
 
 Activate your Environment\
@@ -14,7 +14,7 @@ Activate your Environment\
 Install the all needed dependencies\
 `pip install -r requirements.txt`
 
-Start with the traning\
+Start with the training\
 `sbatch train.sh`
 
 
@@ -72,8 +72,8 @@ Start with the traning\
  
      
 ## Training
-### Algorithm: *DDPG*
-TODO
+### Algorithm: DDPG
+![DDPG Algorithm](img/ddpg_algo.png)
 
 
 ### Description:
