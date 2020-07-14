@@ -81,14 +81,19 @@ TODO
 * Score: a list contain the max Reward in each game, could be saved in "pth" File, and load to see the change in plot.
 * Total Average Score: calculated from the average scores of last 100 episodes, we take it as an indicator for the training
 
-## Goal
+### Goal
 1. **Default Train**: Train with DDPG 
 2. **Hyperparmeter Tuning** and possibly modify NN structure
 3. **Evaluation**: changed Version vs. default DDPG Version
 4. **Result**: should be save as *figure*    
     
+### Relevant Papers
+* [Deterministic Policy Gradient Algorithms] (http://proceedings.mlr.press/v32/silver14.pdf), Lillicrap et al. 2016\
+* [Continuous Control with Deep Reinforcement Learning] (https://arxiv.org/pdf/1509.02971.pdf), Silver et al. 2014
 
-### Groupmembers
+
+
+### Contributors
 [Mustafa Yasin](https://github.com/MustafaYasin)\
 [Xingjian Chen](https://github.com/marcchan)\
 [Yang Mao](https://github.com/leo-mao)\
