@@ -70,7 +70,7 @@ class Agent:
             action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
         if add_noise:
-            action += self.noise.sample()
+            action += self.noise.sample() * 0.05
         return np.clip(action, -1, 1)
 
     def reset(self):
