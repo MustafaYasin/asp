@@ -2,25 +2,25 @@
 [Python](https://www.python.org/downloads/) 3.6.10 is required to run this project\
 [mlagents](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.4.0) 0.4.0 is required to run this project
 ## Suggestion: using conda env/venv
-Install Anacoda on [Linux] (https://docs.anaconda.com/anaconda/install/linux/)\
-Install Anaconda on [MacOS] (https://docs.anaconda.com/anaconda/install/mac-os/)
+Install Anacoda on [Linux](https://docs.anaconda.com/anaconda/install/linux/) \
+Install Anaconda on [MacOS](https://docs.anaconda.com/anaconda/install/mac-os/)
 
-Create a virtual Environment via Anaconda\
+Create a virtual Environment via Anaconda
 ```
 conda create -n yourenvname python=3.6.10 anaconda
 ```
 
-Activate your Environment\
+Activate your Environment
 ```
 source activate yourenvname
 ```
 
-Install the all needed dependencies\
+Install the all needed dependencies
 ```
 pip install -r requirements.txt
 ```
 
-Start with the training\
+Start with the training
 ```
 sbatch train.sh
 ```
@@ -70,7 +70,7 @@ sbatch train.sh
             ```
                       
     * Vector Action space: (Continuous) Size of 2, corresponding to movement toward net or away from net, and jumping.
-         * `shape`: `(2, 2)`  the env has 2 agents, 
+         * `shape`: `(2, 2)`  the enasdfv has 2 agents, 
          * `vectorAction[0]`: action for left side player
          * `vectorAction[1]`: action for right side player  
          * take the `vectorAction[0]` for example:
@@ -87,6 +87,8 @@ Q-function to learn the policy.
 
 This technique is a very similar one to Q-learning, which basically says that if you know the optimal action-value 
 function Q^*(s,a), then in any given state, the optimal action a^*(s) can be found by solving a^*(s) = argmax_a Q^*(s,a).
+
+
 ![DDPG Algorithm](img/ddpg_algo.png)
 
 
