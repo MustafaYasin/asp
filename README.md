@@ -81,6 +81,12 @@ sbatch train.sh
      
 ## Training
 ### Algorithm: DDPG
+Deep Deterministic Policy Gradient (DDPG) is an algorithm which concurrently learns a Q-function and a policy. 
+With the aid of an off-policy data and the Bellman equation it manages to learn the Q-function, and applies the 
+Q-function to learn the policy. 
+
+This technique is a very similar one to Q-learning, which basically says that if you know the optimal action-value 
+function Q^*(s,a), then in any given state, the optimal action a^*(s) can be found by solving a^*(s) = argmax_a Q^*(s,a).
 ![DDPG Algorithm](img/ddpg_algo.png)
 
 
