@@ -99,7 +99,9 @@ sbatch train.sh
 * [Deterministic Policy Gradient Algorithms](http://proceedings.mlr.press/v32/silver14.pdf), Lillicrap et al. 2016
 * [Continuous Control with Deep Reinforcement Learning](https://arxiv.org/pdf/1509.02971.pdf), Silver et al. 2014
 
-
+### References
+* [OpenAI Spinning Up](https://spinningup.openai.com/en/latest/algorithms/ddpg.html)
+* [Deep Deterministic Policy Gradients Explained](https://towardsdatascience.com/deep-deterministic-policy-gradients-explained-2d94655a9b7b)
 
 ### Contributors
 * [Mustafa Yasin](https://github.com/MustafaYasin)
