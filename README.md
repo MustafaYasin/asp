@@ -6,16 +6,24 @@ Install Anacoda on [Linux] (https://docs.anaconda.com/anaconda/install/linux/)\
 Install Anaconda on [MacOS] (https://docs.anaconda.com/anaconda/install/mac-os/)
 
 Create a virtual Environment via Anaconda\
-`conda create -n yourenvname python=3.6.10 anaconda`
+```
+conda create -n yourenvname python=3.6.10 anaconda
+```
 
 Activate your Environment\
-`source activate yourenvname`
+```
+source activate yourenvname
+```
 
 Install the all needed dependencies\
-`pip install -r requirements.txt`
+```
+pip install -r requirements.txt
+```
 
 Start with the training\
-`sbatch train.sh`
+```
+sbatch train.sh
+```
 
 
 # Project Introduction
