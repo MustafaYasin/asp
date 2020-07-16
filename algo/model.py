@@ -55,7 +55,7 @@ class Critic(nn.Module):
   """Critic (Value) Model."""
 
   def __init__(self, state_size, action_size, seed, fcs1_units=512, fc2_units=256, dropout=0.5):
-
+    # maybe lower dropout?
     """Initialize parameters and build model.
     Params
     ======
@@ -70,13 +70,13 @@ class Critic(nn.Module):
     self.seed = torch.manual_seed(seed)
     self.dropout = nn.Dropout(p=dropout)
     self.fcs1 = nn.Linear(state_size, fcs1_units)
-    self.rl1 = nn.ReLU()
-    self.dense_bn1 = nn.BatchNorm1d(fcs1_units + action_size)
-    self.dropout = nn.Dropout(p=dropout)
+    # self.rl1 = nn.ReLU()
+    # self.dense_bn1 = nn.BatchNorm1d(fcs1_units + action_size)
+    # self.dropout = nn.Dropout(p=dropout)
     self.fc2 = nn.Linear(fcs1_units + action_size, fc2_units)
-    self.rl1 = nn.ReLU()
-    self.dense_bn1 = nn.BatchNorm1d(fc2_units)
-    self.dropout = nn.Dropout(p=dropout)
+    # self.rl1 = nn.ReLU()
+    # self.dense_bn1 = nn.BatchNorm1d(fc2_units)
+    # self.dropout = nn.Dropout(p=dropout)
     self.fc3 = nn.Linear(fc2_units, 1)
     self.reset_parameters()
   
