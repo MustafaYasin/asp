@@ -12,7 +12,7 @@ from algo.ddpg_agent import Agent
 from collections import deque
 
 # For linux
-env = UnityEnvironment(file_name="Tennis_Linux/Tennis.x86_64", no_graphics=True)
+env = UnityEnvironment(file_name="Tennis_Linux_0.4_final/Tennis_0.4_Final.x86_64", no_graphics=True)
 # For mac os
 # env = UnityEnvironment(file_name="Tennis_old.app")
 
@@ -38,20 +38,39 @@ train_mode = True
 agent = Agent(state_size=state_size, action_size=action_size, random_seed=random_seed)
 save_dir = datetime.now().strftime("%m%d_%H:%M")
 makedirs(save_dir, exist_ok=True)
-continue_train = True
+continue_train = False
+start_episodes = 1
 if continue_train:
-    trained = torch.load("a-c_2695-j244928-3.pth", map_location='cpu')
-    agent.actor_local.load_state_dict(trained['actor_static'])
-    agent.critic_local.load_state_dict(trained['critic_static'])
+  trained = torch.load("a-c_2695-j244928-3.pth", map_location='cpu')
+  agent.actor_local.load_state_dict(trained['actor_static'])
+  agent.actor_target.load_state_dict(trained['actor_target'])
+  agent.actor_local.eval()
+  agent.actor_target.eval()
+  agent.critic_local.load_state_dict(trained['critic_static'])
+  agent.critic_target.load_state_dict(trained['critic_target'])
+  agent.critic_local.eval()
+  agent.critic_target.eval()
+  start_episodes = trained['episode']
 
-def ddpg(n_episodes=5000, max_t=5000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=0.7):
+def ddpg(n_episodes=5000, max_t=2000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=3, base_score=0.9):
+  """
 
+  :param n_episodes:
+  :param max_t:
+  :param print_every:
+  :param save_every:
+  :param learn_every: learn the
+  :param num_learn:
+  :param goal_score: the goal the model pursues
+  :param base_score: stands for the baseline, after reaching which the model will save the train result
+  :return:
+  """
   total_scores_deque = deque(maxlen=100)
   total_scores = []
   actor_losses = []
   critic_losses = []
 
-  for i_episode in range(1, n_episodes + 1):
+  for i_episode in range(start_episodes, start_episodes + n_episodes):
 
     # Reset Env and Agent
     env_info = env.reset(train_mode=train_mode)[brain_name]  # reset the environment
@@ -59,18 +78,14 @@ def ddpg(n_episodes=5000, max_t=5000, print_every=5, save_every=50, learn_every=
     scores = np.zeros(num_agents)  # initialize the score (for each agent)
 
     agent.reset()
-    
     start_time = time.time()
 
     for t in range(max_t):
       actions = agent.act(states)
-      # print('actions:{}'.format(actions))
       env_info = env.step(actions)[brain_name]  # send all actions to the environment
       next_states = env_info.vector_observations  # get next state (for each agent)
       rewards = env_info.rewards  # get reward (for each agent)
-      # print(rewards)
       dones = env_info.local_done  # see if episode finished
-      # print('dones:{}'.format(dones))
       for state, action, reward, next_state, done in zip(states, actions, rewards, next_states, dones):
         agent.step(state, action, reward, next_state, done)  # send actions to the agent
 
@@ -84,12 +99,10 @@ def ddpg(n_episodes=5000, max_t=5000, print_every=5, save_every=50, learn_every=
         # potential memory leak
         actor_losses.append(a_l * 1e3)
         critic_losses.append(c_l * 1e3)
-
       if np.any(dones):  # exit loop if episode finished
         break
 
     max_score = np.max(scores)
-
     # Take max of all agents' scores
     total_scores_deque.append(max_score)
     total_scores.append(max_score)
@@ -98,38 +111,45 @@ def ddpg(n_episodes=5000, max_t=5000, print_every=5, save_every=50, learn_every=
     total_average_score = np.mean(total_scores_deque)
     duration = time.time() - start_time
 
-
     if i_episode % print_every == 0:
       print(
         '\rEpisode {}\tTotal Average Score: {:.2f}\tMax: {:.2f}\tDuration: {:.2f}'.format(
           i_episode, total_average_score, max_score, duration))
 
-    if i_episode % save_every == 0:
 
+    if i_episode % save_every == 0 and i_episode <= 200:
       torch.save({'episode': i_episode,
                   'actor_static': agent.actor_local.state_dict(),
                   'actor_loss': actor_losses,
+                  'actor_target': agent.actor_target.state_dict(),
                   'critic_static': agent.critic_local.state_dict(),
                   'critic_loss': critic_losses,
+                  'critic_target': agent.critic_target.state_dict(),
                   'total_score': total_scores
                   }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
 
+    if total_average_score > base_score and i_episode >= 1000:
+      torch.save({'episode': i_episode,
+                  'actor_static': agent.actor_local.state_dict(),
+                  'actor_loss': actor_losses,
+                  'actor_target': agent.actor_target.state_dict(),
+                  'critic_static': agent.critic_local.state_dict(),
+                  'critic_loss': critic_losses,
+                  'critic_target': agent.critic_target.state_dict(),
+                  'total_score': total_scores
+                  }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
+      base_score = total_average_score
+
+    # check if goal archived
     if total_average_score >= goal_score and i_episode >= 1000:
-      print('Problem Solved after {} epsisodes!! Total Average score: {:.2f}'.format(i_episode, total_average_score))
-      torch.save({'episode': i_episode,
-                  'actor_static': agent.actor_local.state_dict(),
-                  'actor_loss': actor_losses,
-                  'critic_static': agent.critic_local.state_dict(),
-                  'critic_loss': critic_losses,
-                  'total_score': total_scores
-                  }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
-      break
+        print('Problem Solved after {} episodes!! Total Average score: {:.2f}'.format(i_episode, total_average_score))
+        break
   return total_scores
 
 
 scores = ddpg()
 fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
+ax = fig.add_subplot(1, 1, 1)
 
 plt.plot(np.arange(1, len(scores)+1), scores)
 plt.ylabel('Average Score')
