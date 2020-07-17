@@ -52,7 +52,7 @@ if continue_train:
   agent.critic_target.eval()
   start_episodes = trained['episode']
 
-def ddpg(n_episodes=5000, max_t=2000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=3, base_score=0.9):
+def ddpg(n_episodes=5000, max_t=2000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=3, base_score=0.5):
   """
 
   :param n_episodes:
@@ -116,36 +116,34 @@ def ddpg(n_episodes=5000, max_t=2000, print_every=5, save_every=50, learn_every=
         '\rEpisode {}\tTotal Average Score: {:.2f}\tMax: {:.2f}\tDuration: {:.2f}'.format(
           i_episode, total_average_score, max_score, duration))
 
-
     if i_episode % save_every == 0 and i_episode <= 200:
-      torch.save({'episode': i_episode,
-                  'actor_static': agent.actor_local.state_dict(),
-                  'actor_loss': actor_losses,
-                  'actor_target': agent.actor_target.state_dict(),
-                  'critic_static': agent.critic_local.state_dict(),
-                  'critic_loss': critic_losses,
-                  'critic_target': agent.critic_target.state_dict(),
-                  'total_score': total_scores
-                  }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
+      _torch_save(i_episode, agent, actor_losses, critic_losses, total_scores)
 
     if total_average_score > base_score and i_episode >= 1000:
-      torch.save({'episode': i_episode,
-                  'actor_static': agent.actor_local.state_dict(),
-                  'actor_loss': actor_losses,
-                  'actor_target': agent.actor_target.state_dict(),
-                  'critic_static': agent.critic_local.state_dict(),
-                  'critic_loss': critic_losses,
-                  'critic_target': agent.critic_target.state_dict(),
-                  'total_score': total_scores
-                  }, '{}/a-c_{}.pth'.format(save_dir, i_episode))
+      _torch_save(i_episode, agent, actor_losses, critic_losses, total_scores)
       base_score = total_average_score
 
     # check if goal archived
     if total_average_score >= goal_score and i_episode >= 1000:
         print('Problem Solved after {} episodes!! Total Average score: {:.2f}'.format(i_episode, total_average_score))
+        _torch_save(i_episode, agent, actor_losses, critic_losses, total_scores)
         break
+
+    # save the model at the end
+  _torch_save(start_episodes + n_episodes, agent, actor_losses, critic_losses, total_scores)
+
   return total_scores
 
+def _torch_save(episode, agent, actor_losses, critic_losses, total_scores):
+  torch.save({'episode': episode,
+              'actor_static': agent.actor_local.state_dict(),
+              'actor_loss': actor_losses,
+              'actor_target': agent.actor_target.state_dict(),
+              'critic_static': agent.critic_local.state_dict(),
+              'critic_loss': critic_losses,
+              'critic_target': agent.critic_target.state_dict(),
+              'total_score': total_scores
+              }, '{}/a-c_{}.pth'.format(save_dir, episode))
 
 scores = ddpg()
 fig = plt.figure()
