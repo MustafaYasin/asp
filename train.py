@@ -52,7 +52,7 @@ if continue_train:
   agent.critic_target.eval()
   start_episodes = trained['episode']
 
-def ddpg(n_episodes=5000, max_t=2000, print_every=5, save_every=50, learn_every=5, num_learn=10, goal_score=3, base_score=0.5):
+def ddpg(n_episodes=5000, max_t=2000, print_every=5, save_every=50, learn_every=10, goal_score=3, base_score=0.5):
   """
 
   :param n_episodes:
@@ -94,7 +94,7 @@ def ddpg(n_episodes=5000, max_t=2000, print_every=5, save_every=50, learn_every=
       
       if t % learn_every == 0:
         a_l, c_l = 0, 0
-        for _ in range(num_learn):
+        for _ in range(learn_every):
           a_l, c_l = agent.start_learn()
         # potential memory leak
         actor_losses.append(a_l * 1e3)
