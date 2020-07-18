@@ -12,12 +12,12 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 GAMMA = 0.99  # discount factor
-# TAU = 2e-1  # for soft update of target parameters
-TAU =  1e-3
+TAU = 2e-1  # for soft update of target parameters
+# TAU =  1e-3
 LR_ACTOR = 1e-4  # learning rate of the actor
 LR_CRITIC = 3e-4  # learning rate of the critic
-# WEIGHT_DECAY = 0.0000  # L2 weight decay
-WEIGHT_DECAY = 1e-5  # L2 weight decay
+WEIGHT_DECAY = 0.0000  # L2 weight decay
+# WEIGHT_DECAY = 1e-5  # L2 weight decay
 BATCH_SIZE = 512  # minibatch size
 BUFFER_SIZE = int(1e5)  # replay buffer size
 
@@ -52,6 +52,7 @@ class Agent:
     self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
 
     # Noise process
+    self.learn_step = 0
     self.noise = OUNoise(action_size, random_seed, mu=mu, theta=theta, sigma=sigma)
 
     # Replay memory
@@ -66,12 +67,14 @@ class Agent:
   def act(self, state, add_noise=True):
     """Returns actions for given state as per current policy."""
     state = torch.from_numpy(state).float().to(device)
+    self.learn_step += 1
     self.actor_local.eval()
     with torch.no_grad():
       action = self.actor_local(state).cpu().data.numpy()
     self.actor_local.train()
     if add_noise:
-      action += self.noise.sample()
+      action += self.noise.sample() * max((100000 - self.learn_step)/100000, 0.05)
+      # print(max((100000 - self.learn_step)/100000, 0.05))
     return np.clip(action, -1, 1)
 
   def reset(self):
