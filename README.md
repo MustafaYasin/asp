@@ -35,7 +35,7 @@ sbatch train.sh
 * **Agents**: The environment contains two agent linked to a single brain named TennisBrain. 
 * **Agent Reward Function (independent)**: 
     * +0.1 To agent when hitting ball over net.
-    * -0.1 To agent who let ball hit their ground, or hit ball out of bounds.
+    * -0.1 To agent who lets the ball hit their ground, or hit the ball out of bounds.
 * **Brains**: One brain with the following observation/action space.
     * Vector Observation space: (Continuous) 8 variables corresponding to position and velocity of ball and racket.  
         * `shape`: `(2, 24)` means the env has 2 agents, Each observes a state with length 24. 
